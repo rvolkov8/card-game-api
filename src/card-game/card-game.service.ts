@@ -5,8 +5,8 @@ import {
 } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { Game } from './interfaces/game.interface';
-import { Deck } from 'src/classes/deck.class';
-import { Card } from 'src/classes/card.class';
+import { Deck } from '../classes/deck.class';
+import { Card } from '../classes/card.class';
 
 @Injectable()
 export class CardGameService {
