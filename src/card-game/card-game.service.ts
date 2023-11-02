@@ -3,8 +3,8 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Game } from './interfaces/game.interface';
 import { v4 as uuidv4 } from 'uuid';
+import { Game } from './interfaces/game.interface';
 import { Deck } from 'src/classes/deck.class';
 import { Card } from 'src/classes/card.class';
 
@@ -51,5 +51,38 @@ export class CardGameService {
     }
 
     return this.games[gameIndex].deck.draw(1);
+  }
+
+  compareCards(cards: string[]): { winningCard: string } {
+    const cardRanks = {
+      ace: 14,
+      king: 13,
+      queen: 12,
+      jack: 11,
+      '10': 10,
+      '9': 9,
+      '8': 8,
+      '7': 7,
+      '6': 6,
+      '5': 5,
+      '4': 4,
+      '3': 3,
+      '2': 2,
+    };
+
+    if (cards.length < 2) {
+      throw new BadRequestException(
+        'At least two cards are required for comparison',
+      );
+    }
+
+    const winningCard = cards.reduce((currentWinner, card) =>
+      cardRanks[card.split(' ')[0].toLowerCase()] >
+      cardRanks[currentWinner.split(' ')[0].toLowerCase()]
+        ? card
+        : currentWinner,
+    );
+
+    return { winningCard };
   }
 }
