@@ -2,6 +2,7 @@ import { Body, Controller, HttpCode, Param, Patch, Post } from '@nestjs/common';
 import { CardGameService } from './card-game.service';
 import { CreateGameDto } from './dtos/create-game.dto';
 import { Game } from './interfaces/game.interface';
+import { Card } from 'src/classes/card.class';
 
 @Controller('game')
 export class CardGameController {
@@ -17,5 +18,10 @@ export class CardGameController {
   @HttpCode(204)
   shuffleDeck(@Param('id') id: string): void {
     this.cardGameService.shuffleDeck(id);
+  }
+
+  @Patch('/:id/draw')
+  drawCard(@Param('id') id: string): Partial<Card> {
+    return this.cardGameService.drawCard(id);
   }
 }

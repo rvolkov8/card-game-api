@@ -6,6 +6,7 @@ import {
 import { Game } from './interfaces/game.interface';
 import { v4 as uuidv4 } from 'uuid';
 import { Deck } from 'src/classes/deck.class';
+import { Card } from 'src/classes/card.class';
 
 @Injectable()
 export class CardGameService {
@@ -38,5 +39,17 @@ export class CardGameService {
     }
 
     this.games[gameIndex].deck.shuffle();
+  }
+
+  drawCard(id: string): Partial<Card> {
+    const gameIndex = this.games.findIndex((game) => (game.id = id));
+    if (gameIndex === -1) {
+      throw new NotFoundException(`Game with ID of ${id} does not exist.`);
+    }
+    if (this.games[gameIndex].deck.count() === 0) {
+      throw new BadRequestException('The deck is empty.');
+    }
+
+    return this.games[gameIndex].deck.draw(1);
   }
 }
