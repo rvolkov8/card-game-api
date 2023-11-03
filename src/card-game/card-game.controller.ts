@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  Param,
-  Patch,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, HttpCode, Param, Patch, Post } from '@nestjs/common';
 import { CardGameService } from './card-game.service';
 import { CreateGameDto } from './dtos/create-game.dto';
 import { Game } from './interfaces/game.interface';
@@ -34,7 +26,7 @@ export class CardGameController {
     return this.cardGameService.drawCard(id);
   }
 
-  @Get('/compare')
+  @Post('/compare')
   compareCards(@Body() body: CompareCardsDto): { winningCard: string } {
     return this.cardGameService.compareCards(body);
   }
