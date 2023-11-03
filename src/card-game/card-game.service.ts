@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Game } from './interfaces/game.interface';
 import { Deck } from '../classes/deck.class';
 import { Card } from '../classes/card.class';
+import { CompareCardsDto } from './dtos/compare-cards.dto';
 
 @Injectable()
 export class CardGameService {
@@ -53,7 +54,8 @@ export class CardGameService {
     return this.games[gameIndex].deck.draw(1);
   }
 
-  compareCards(cards: string[]): { winningCard: string } {
+  compareCards(body: CompareCardsDto): { winningCard: string } {
+    const { cards } = body;
     const cardRanks = {
       ace: 14,
       king: 13,
@@ -69,12 +71,6 @@ export class CardGameService {
       '3': 3,
       '2': 2,
     };
-
-    if (cards.length < 2) {
-      throw new BadRequestException(
-        'At least two cards are required for comparison',
-      );
-    }
 
     const winningCard = cards.reduce((currentWinner, card) =>
       cardRanks[card.split(' ')[0].toLowerCase()] >

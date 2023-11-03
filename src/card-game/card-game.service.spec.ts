@@ -1,5 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CardGameService } from './card-game.service';
+import { CardValuesEnum } from './enums/card-values.enum';
+import { CompareCardsDto } from './dtos/compare-cards.dto';
 
 describe('CardGameService', () => {
   let service: CardGameService;
@@ -52,18 +54,12 @@ describe('CardGameService', () => {
   });
 
   it('should compare two cards and return the winning card', () => {
-    const cards = ['Ace of Spades', 'King of Hearts'];
+    const cards: CompareCardsDto = {
+      cards: [CardValuesEnum.aceOfSpades, CardValuesEnum.kingOfSpades],
+    };
 
     const result = service.compareCards(cards);
 
     expect(result.winningCard).toEqual('Ace of Spades');
-  });
-
-  it('should throw a BadRequestException for less than two cards', () => {
-    const cards = ['Ace of Spades'];
-
-    expect(() => service.compareCards(cards)).toThrow(
-      'At least two cards are required for comparison',
-    );
   });
 });

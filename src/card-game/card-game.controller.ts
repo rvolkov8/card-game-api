@@ -11,6 +11,7 @@ import { CardGameService } from './card-game.service';
 import { CreateGameDto } from './dtos/create-game.dto';
 import { Game } from './interfaces/game.interface';
 import { Card } from 'src/classes/card.class';
+import { CompareCardsDto } from './dtos/compare-cards.dto';
 
 @Controller('game')
 export class CardGameController {
@@ -34,7 +35,7 @@ export class CardGameController {
   }
 
   @Get('/compare')
-  compareCards(@Body() cards: string[]): { winningCard: string } {
-    return this.cardGameService.compareCards(cards);
+  compareCards(@Body() body: CompareCardsDto): { winningCard: string } {
+    return this.cardGameService.compareCards(body);
   }
 }
