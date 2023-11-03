@@ -1,30 +1,6 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Card Game API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This is a simple Nest.js API for managing card games. It allows you to create card games, shuffle decks, draw cards, and compare cards.
 
 ## Installation
 
@@ -45,29 +21,99 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+The API should now be running at [http://localhost:3000](http://localhost:3000).
+
 ## Test
 
 ```bash
 # unit tests
 $ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
 ```
 
-## Support
+## Usage
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Creating a Game
 
-## Stay in touch
+To create a new card game, you can make a POST request to the `/game` endpoint. You need to provide the names of the first and second players in the request body.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+**Example Request:**
 
-## License
+```http
+POST /game
+Content-Type: application/json
 
-Nest is [MIT licensed](LICENSE).
+{
+  "firstPlayer": "Player 1",
+  "secondPlayer": "Player 2"
+}
+```
+
+**Example Response:**
+
+```json
+{
+  "id": "a-unique-game-id",
+  "firstPlayer": "Player 1",
+  "secondPlayer": "Player 2"
+}
+```
+
+### Shuffling the Deck
+
+You can shuffle the deck of a game by making a PATCH request to the `/game/{id}/shuffle` endpoint, where `{id}` is the unique game ID.
+
+**Example Request:**
+
+```http
+PATCH /game/a-unique-game-id/shuffle
+```
+
+This action return a response with 204 status code and shuffles the deck in the specified game.
+
+### Drawing a Card
+
+To draw a card from the deck of a game, make a PATCH request to the `/game/{id}/draw` endpoint, where `{id}` is the unique game ID.
+
+**Example Request:**
+
+```http
+PATCH /game/a-unique-game-id/draw
+```
+
+**Example Response:**
+
+```json
+{
+  "suit": "hearts",
+  "rank": 7
+}
+```
+
+### Comparing Cards
+
+You can compare two or more cards to find the winning card by making a GET request to the `/game/compare` endpoint. Provide an array of card names in the request body.
+
+**Example Request:**
+
+```http
+GET /game/compare
+Content-Type: application/json
+
+["Ace of spades", "King of hearts", "5 of diamonds"]
+```
+
+**Example Response:**
+
+```json
+{
+  "winningCard": "Ace of spades"
+}
+```
+
+## API Endpoints
+
+- `POST /game`: Create a new game.
+- `PATCH /game/{id}/shuffle`: Shuffle the deck in a game.
+- `PATCH /game/{id}/draw`: Draw a card from a game's deck.
+- `GET /game/compare`: Compare multiple cards to find the winning card.
+
