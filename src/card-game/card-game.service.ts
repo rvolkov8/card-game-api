@@ -42,7 +42,7 @@ export class CardGameService {
     this.games[gameIndex].deck.shuffle();
   }
 
-  drawCard(id: string): Partial<Card> {
+  drawCard(id: string): Card {
     const gameIndex = this.games.findIndex((game) => (game.id = id));
     if (gameIndex === -1) {
       throw new NotFoundException(`Game with ID of ${id} does not exist.`);
@@ -51,7 +51,8 @@ export class CardGameService {
       throw new BadRequestException('The deck is empty.');
     }
 
-    return this.games[gameIndex].deck.draw(1);
+    const [drawnCard] = this.games[gameIndex].deck.draw(1);
+    return drawnCard;
   }
 
   compareCards(body: CompareCardsDto): { winningCard: string } {

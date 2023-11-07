@@ -22,7 +22,7 @@ export class CardGameController {
   }
 
   @Patch('/:id/draw')
-  drawCard(@Param('id') id: string): Partial<Card> {
+  drawCard(@Param('id') id: string): Card {
     return this.cardGameService.drawCard(id);
   }
 
