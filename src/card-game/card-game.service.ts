@@ -13,6 +13,14 @@ import { CompareCardsDto } from './dtos/compare-cards.dto';
 export class CardGameService {
   private games: Game[] = [];
 
+  private findGameIndex(id: string) {
+    const gameIndex = this.games.findIndex((game) => game.id === id);
+    if (gameIndex === -1) {
+      throw new NotFoundException(`Game with ID of ${id} does not exist.`);
+    }
+    return gameIndex;
+  }
+
   createGame(firstPlayer: string, secondPlayer: string): Partial<Game> {
     const newGame: Game = {
       id: uuidv4(),
@@ -28,11 +36,8 @@ export class CardGameService {
   }
 
   shuffleDeck(id: string): void {
-    const gameIndex = this.games.findIndex((game) => (game.id = id));
+    const gameIndex = this.findGameIndex(id);
 
-    if (gameIndex === -1) {
-      throw new NotFoundException(`Game with ID of ${id} does not exist.`);
-    }
     if (this.games[gameIndex].deck.count() === 0) {
       throw new BadRequestException(
         'The deck is empty and cannot be shuffled.',
@@ -43,10 +48,8 @@ export class CardGameService {
   }
 
   drawCard(id: string): Card {
-    const gameIndex = this.games.findIndex((game) => (game.id = id));
-    if (gameIndex === -1) {
-      throw new NotFoundException(`Game with ID of ${id} does not exist.`);
-    }
+    const gameIndex = this.findGameIndex(id);
+
     if (this.games[gameIndex].deck.count() === 0) {
       throw new BadRequestException('The deck is empty.');
     }
